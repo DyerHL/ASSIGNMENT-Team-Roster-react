@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './styles/index.scss';
+import { BrowserRouter as Router } from 'react-router-dom';
 import firebase from 'firebase/app';
 import Initialize from './Initialize';
 import firebaseConfig from './api/apiKeys';
@@ -12,7 +13,9 @@ firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
   <React.StrictMode>
-    <Initialize />
+    <Router>
+      <Initialize />
+    </Router>
   </React.StrictMode>,
   document.getElementById('root'),
 );
