@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import firebase from 'firebase/app';
 import 'firebase/auth';
 import SignIn from '../views/SignIn';
+import Navigation from '../components/Navigation';
 
 function Initialize() {
   // const [player, setPlayer] = useState([]);
@@ -23,6 +24,7 @@ function Initialize() {
     <div>
       {user ? (
         <div>
+          <Navigation />
           <h1>Team Roster</h1>
         </div>
       ) : (
