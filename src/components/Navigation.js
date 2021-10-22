@@ -21,7 +21,7 @@ export default function Navigation() {
           type="button"
           className="btn btn-light border border-dark"
         >
-          Add A Player
+          New
         </button>
         <button
           onClick={signOutUser}

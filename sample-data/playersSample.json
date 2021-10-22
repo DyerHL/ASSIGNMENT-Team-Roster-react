@@ -1,0 +1,14 @@
+{
+    "player1": {
+      "name": "Filip Forsberg",
+      "imageUrl": "https://www.hockeydb.com/ihdb/photos/filip-forsberg-2021-1412.jpg",
+      "position": "Left Wing",
+      "uid": "123456"
+    },
+    "player2": {
+      "name": "Juuse Saros",
+      "imageUrl": "https://www.hockeydb.com/ihdb/photos/juuse-saros-2020-1412.jpg",
+      "position": "Goaltender",
+      "uid": "123456"
+    }
+  }
