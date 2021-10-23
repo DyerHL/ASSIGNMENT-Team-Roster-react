@@ -1,23 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { updatePlayer, deletePlayer } from '../api/data/playerData';
+import { useHistory } from 'react-router-dom';
+import { updatePlayer, deletePlayer, getPlayers } from '../api/data/playerData';
 
-export default function Players({ players, setPlayers, setEditItem }) {
+export default function Players({
+  user, player, setPlayers, setEditItem,
+}) {
+  const history = useHistory();
   const handleClick = (method) => {
     if (method === 'delete') {
-      deletePlayer(players.firebaseKey).then(setPlayers);
+      deletePlayer(player.firebaseKey).then(() => getPlayers(user.uid).then(setPlayers));
     } else {
       updatePlayer().then(setPlayers);
     }
   };
   return (
     <div className="card">
-      {/* <img src={players.imageUrl} className="card-img-top" alt="player" /> */}
+      <img src={player.imageUrl} className="card-img-top" alt="player" />
       <div className="card-body">
-        <h5 className="card-title">{players.name}</h5>
-        <p className="card-text">Position: {players.position}</p>
+        <h5 className="card-title">{player.name}</h5>
+        <p className="card-text">Position: {player.position}</p>
         <button
-          onClick={() => setEditItem(players)}
+          onClick={() => { setEditItem(player); history.push('/addPlayer'); }}
           className="btn btn-info"
           type="button"
         >
@@ -36,12 +40,20 @@ export default function Players({ players, setPlayers, setEditItem }) {
 }
 
 Players.propTypes = {
-  players: PropTypes.shape({
+  player: PropTypes.shape({
     name: PropTypes.string,
     firebaseKey: PropTypes.string,
     imageUrl: PropTypes.string,
     position: PropTypes.string,
   }).isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+    uid: PropTypes.string,
+  }),
   setEditItem: PropTypes.func.isRequired,
   setPlayers: PropTypes.func.isRequired,
+};
+
+Players.defaultProps = {
+  user: {},
 };

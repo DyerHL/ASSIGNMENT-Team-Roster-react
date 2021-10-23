@@ -19,10 +19,9 @@ function Initialize() {
           fullName: authed.displayName,
           profileImage: authed.photoURL,
           uid: authed.uid,
-          user: authed.email.split('@')[0],
         };
         setUser(userInfoObj);
-        getPlayers(authed).then(setUser);
+        getPlayers(authed.uid).then(setPlayers);
       } else if (user || user === null) {
         setUser(false);
       }
@@ -33,9 +32,9 @@ function Initialize() {
     <div>
       {user ? (
         <div>
-          <Navigation />
           <h1>Team Roster</h1>
-          <Routes setEditItem={setEditItem} editItem={editItem} setPlayers={setPlayers} players={players} />
+          <Navigation />
+          <Routes setEditItem={setEditItem} obj={editItem} setPlayers={setPlayers} players={players} user={user} />
         </div>
       ) : (
         <SignIn />
