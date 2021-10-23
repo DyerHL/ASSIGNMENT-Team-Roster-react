@@ -8,12 +8,14 @@ export default function Routes({
   players,
   setPlayers,
   setEditItem,
+  obj,
+  user,
 }) {
   return (
     <div>
       <Switch>
-        <Route exact path="/" component={() => <Home players={players} setPlayers={setPlayers} setEditItem={setEditItem} />} />
-        <Route exact path="/addPlayer" component={() => <AddPlayer players={players} setPlayers={setPlayers} setEditItem={setEditItem} />} />
+        <Route exact path="/" component={() => <Home players={players} setPlayers={setPlayers} setEditItem={setEditItem} obj={obj} />} />
+        <Route exact path="/addPlayer" component={() => <AddPlayer user={user} players={players} setPlayers={setPlayers} setEditItem={setEditItem} obj={obj} />} />
       </Switch>
     </div>
   );
@@ -21,6 +23,20 @@ export default function Routes({
 
 Routes.propTypes = {
   players: PropTypes.arrayOf(PropTypes.object).isRequired,
+  obj: PropTypes.shape({
+    name: PropTypes.string,
+    firebaseKey: PropTypes.string,
+    imageUrl: PropTypes.string,
+    position: PropTypes.string,
+  }).isRequired,
+  user: PropTypes.shape({
+    name: PropTypes.string,
+    uid: PropTypes.string,
+  }),
   setPlayers: PropTypes.func.isRequired,
   setEditItem: PropTypes.func.isRequired,
+};
+
+Routes.defaultProps = {
+  user: null,
 };

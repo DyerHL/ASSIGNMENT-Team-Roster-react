@@ -2,18 +2,22 @@ import React from 'react';
 import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react/cjs/react.development';
 import PropTypes from 'prop-types';
-import { createPlayer, updatePlayer } from '../api/data/playerData';
+import { createPlayer, updatePlayer, getPlayers } from '../api/data/playerData';
 
 const initialState = {
   name: '',
   imageUrl: '',
   position: '',
-  uid: '',
   firebaseKey: '',
 };
 
-export default function AddPlayer({ obj, setEditItem, setPlayers }) {
-  const [formInput, setFormInput] = useState(initialState);
+export default function AddPlayer({
+  obj,
+  setEditItem,
+  setPlayers,
+  user,
+}) {
+  const [formInput, setFormInput] = useState({ ...initialState, uid: user.uid });
   const history = useHistory();
 
   const handleChange = (e) => {
@@ -25,31 +29,39 @@ export default function AddPlayer({ obj, setEditItem, setPlayers }) {
   };
 
   useEffect(() => {
+    let isMounted = true;
     if (obj.firebaseKey) {
-      setFormInput({
-        name: obj.name,
-        firebaseKey: obj.firebaseKey,
-        imageUrl: obj.imageUrl,
-        position: obj.position,
-      });
+      if (isMounted) {
+        setFormInput({
+          name: obj.name,
+          firebaseKey: obj.firebaseKey,
+          imageUrl: obj.imageUrl,
+          position: obj.position,
+          uid: obj.uid,
+        });
+      }
     }
+    return () => {
+      isMounted = false;
+    };
   }, [obj]);
 
   const resetForm = () => {
-    setFormInput({ ...initialState });
+    setFormInput(initialState);
     setEditItem({});
   };
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
     if (obj.firebaseKey) {
-      updatePlayer(formInput).then((player) => {
-        setPlayers(player);
+      updatePlayer(formInput).then(() => {
+        getPlayers(user.uid).then(setPlayers);
         resetForm();
+        history.push('/');
       });
     } else {
-      createPlayer(formInput).then((player) => {
-        setPlayers(player);
+      createPlayer(formInput).then(() => {
+        getPlayers(user.uid).then(setPlayers);
         resetForm();
         history.push('/');
       });
@@ -107,7 +119,17 @@ AddPlayer.propTypes = {
     firebaseKey: PropTypes.string,
     imageUrl: PropTypes.string,
     position: PropTypes.string,
-  }).isRequired,
+    uid: PropTypes.string,
+  }),
+  user: PropTypes.shape({
+    name: PropTypes.string,
+    uid: PropTypes.string,
+  }),
   setEditItem: PropTypes.func.isRequired,
   setPlayers: PropTypes.func.isRequired,
+};
+
+AddPlayer.defaultProps = {
+  obj: {},
+  user: {},
 };
